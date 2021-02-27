@@ -1,0 +1,30 @@
+version: '3'
+
+# This file loads the apps and consumes cloud storage resources.
+
+
+services:
+
+  # Adjust /api/.env.docker and /data-load/.env.docker to point to your SingleStore database and AWS S3 buckets
+
+  # loads data from OpenSky Network into S3
+  data-load:
+    build:
+      context: data-load
+    image: singlestore-planes-data-load
+    depends_on:
+    - minio
+
+  # includes both the Express api and Vue app
+  webapp:
+    build:
+      context: .
+    image: singlestore-planes-webapp
+    ports:
+    - 8000:80
+    depends_on:
+    - minio
+    - singlestore
+
+volumes:
+  singlestore-data:

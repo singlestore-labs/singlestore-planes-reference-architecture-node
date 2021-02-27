@@ -1,0 +1,7 @@
+node_modules
+package-lock.json
+dist
+.minio.sys
+/s3-data/flights/*.json
+/api/public/**
+!/api/public/favicon.ico

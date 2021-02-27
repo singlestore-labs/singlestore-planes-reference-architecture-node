@@ -1,0 +1,54 @@
+version: '3'
+
+# This file uses all local resources.
+
+
+services:
+
+  singlestore:
+    image: memsql/cluster-in-a-box
+    ports:
+    - 3306:3306
+    - 8080:8080
+    volumes:
+    - singlestore-data:/var/lib/memsql
+    - .:/data-load
+    - ./init.sql:/init.sql
+    environment:
+    # use the LICENSE_KEY environment variable set in the terminal:
+    - LICENSE_KEY=${LICENSE_KEY}
+    - START_AFTER_INIT=Y
+    - ROOT_PASSWORD=password_here
+
+  minio:
+    image: minio/minio
+    command: server /data
+    ports:
+    - 9000:9000
+    environment:
+      MINIO_ACCESS_KEY: singlestore # min 3 characters
+      MINIO_SECRET_KEY: minio123 # min 8 characters
+    volumes:
+    - ./s3-data:/data
+
+  # loads data from OpenSky Network into S3
+  data-load:
+    build:
+      context: data-load
+    image: singlestore-planes-data-load
+    depends_on:
+    - minio
+
+  # includes both the Express api and Vue app
+  webapp:
+    build:
+      context: .
+    image: singlestore-planes-webapp
+    ports:
+    - 8000:80
+    depends_on:
+    - minio
+    - singlestore
+
+volumes:
+  singlestore-data:
