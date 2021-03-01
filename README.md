@@ -30,7 +30,7 @@ Choose an installation mechanism from the sections below to install:
 
 ### Managed Service Installation Steps
 
-1. [Sign up](https://msql.co/2E8aBa2) for a free SingleStore license. This allows you to run up to 4 nodes up to 32 gigs each for free.
+1. [Sign up](https://msql.co/2E8aBa2) for SingleStore Managed Service.
 
 2. Load data into AWS S3:
 

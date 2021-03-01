@@ -12,8 +12,6 @@ services:
     build:
       context: data-load
     image: singlestore-planes-data-load
-    depends_on:
-    - minio
 
   # includes both the Express api and Vue app
   webapp:
@@ -22,9 +20,6 @@ services:
     image: singlestore-planes-webapp
     ports:
     - 8000:80
-    depends_on:
-    - minio
-    - singlestore
 
 volumes:
   singlestore-data:
