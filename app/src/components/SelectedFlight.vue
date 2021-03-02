@@ -10,8 +10,8 @@
       </div>
       <div>
         <span class="data"><span class="title">position:</span> {{selectedFlight.latitude}}, {{selectedFlight.longitude}}</span>
-        <span class="data" v-if="!selectedFlight.on_ground"><span class="title">altitude:</span> {{selectedFlight.altitude}} m</span>
-        <span class="data" v-if="!selectedFlight.on_ground"><span class="title">velocity:</span> {{selectedFlight.velocity}} m/s</span>
+        <span class="data" v-if="!selectedFlight.on_ground"><span class="title">altitude:</span> {{selectedFlight.altitude.toLocaleString()}} m</span>
+        <span class="data" v-if="!selectedFlight.on_ground"><span class="title">velocity:</span> {{selectedFlight.velocity.toLocaleString()}} m/s</span>
         <span class="data" v-if="selectedFlight.on_ground"><span class="title">location:</span> landed</span>
       </div>
     </div>

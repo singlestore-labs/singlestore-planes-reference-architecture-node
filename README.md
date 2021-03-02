@@ -46,7 +46,7 @@ Choose an installation mechanism from the sections below to install:
 
 6. Clone this GitHub repository or download the zip file and unzip it.
 
-7. Adjust connection details in both `api/.env.docker` and `data-load/.env.docker` to point to your managed service cluster and S3 bucket.
+7. Adjust connection details in `docker-compose-managed-service.yaml` to point to your managed service cluster and S3 bucket.
 
 8. Run `docker-compose build -f docker-compose-managed-service.yaml` to build all the containers.
 

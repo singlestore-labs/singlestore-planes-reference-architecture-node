@@ -24,6 +24,5 @@ ENV NODE_ENV=production
 WORKDIR /app
 
 COPY --from=build /src/dist .
-COPY .env.docker .env
 
 CMD ["node", "index"]

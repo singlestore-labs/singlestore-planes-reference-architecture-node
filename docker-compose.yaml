@@ -36,6 +36,12 @@ services:
     build:
       context: data-load
     image: singlestore-planes-data-load
+    environment:
+    - S3_ENDPOINT=minio
+    - S3_PORT=9000
+    - S3_ACCESSKEY=singlestore
+    - S3_SECRETKEY=minio123
+    - S3_USESSL=false
     depends_on:
     - minio
 
@@ -46,6 +52,10 @@ services:
     image: singlestore-planes-webapp
     ports:
     - 8000:80
+    environment:
+    - SINGLESTORE_HOST=singlestore
+    - SINGLESTORE_USER=root
+    - SINGLESTORE_PASSWORD=password_here
     depends_on:
     - singlestore
 

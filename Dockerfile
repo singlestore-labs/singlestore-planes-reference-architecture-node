@@ -16,7 +16,6 @@ RUN npm run build
 RUN npm prune --production
 RUN rm -rf src
 RUN rm -rf tsconfig.json
-RUN mv .env.docker .env
 
 
 # build vue app with vite
