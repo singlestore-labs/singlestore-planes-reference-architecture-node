@@ -6,8 +6,9 @@ import { Readable } from 'stream';
 import { Flight } from './flight';
 import { OpenSkyResponse } from './opensky';
 
-const BUCKET_NAME = 'flights'; // ASSUME: it already exists
 dotenv.config();
+const BUCKET_NAME = process.env.S3_BUCKET || 'flights'; // ASSUME: it already exists
+const S3_FOLDER = process.env.S3_FOLDER;
 const S3_CLIENT = getS3Client();
 
 
@@ -30,7 +31,7 @@ export default async function loadData(): Promise<void> {
     // 1 line per object, no array wrapper around it, no comma between objects
     const content = flights.map((f: Flight) => JSON.stringify(f)).join('\n');
 
-    const filename = `${load_date}.json`.replace(/:/g,'-');
+    const filename = `${S3_FOLDER ? S3_FOLDER+'/' : ''}${load_date}.json`.replace(/:/g,'-');
 
     await uploadFileToS3(S3_CLIENT, BUCKET_NAME, filename, content);
 
@@ -64,8 +65,16 @@ export function pivotData(f: unknown[], load_date: string): Flight {
 }
 
 export function getS3Client(): Client {
+  let endPoint = process.env.S3_ENDPOINT;
+  if (!endPoint && process.env.S3_REGION && process.env.S3_BUCKET) {
+    endPoint = `${process.env.S3_BUCKET}.s3.${process.env.S3_REGION}.amazonaws.com`;
+  }
+  if (!endPoint) {
+    endPoint = 's3.amazonaws.com'; // will probably fail
+  }
   const config: ClientOptions = {
-    endPoint: process.env.S3_ENDPOINT || 's3.amazonaws.com',
+    endPoint,
+    region: process.env.S3_REGION,
     port: process.env.S3_PORT ? parseInt(process.env.S3_PORT, 10) : undefined,
     useSSL: process.env.S3_USESSL !== 'false',
     accessKey: process.env.S3_ACCESSKEY || '',

@@ -5,8 +5,6 @@ version: '3'
 
 services:
 
-  # Adjust /api/.env.docker and /data-load/.env.docker to point to your SingleStore database and AWS S3 buckets
-
   # loads data from OpenSky Network into S3
   data-load:
     build:
@@ -14,11 +12,11 @@ services:
     image: singlestore-planes-data-load
     environment:
     # TODO: Set variables to your S3 endpoint
-    - S3_ENDPOINT=set_to_your_s3_url
-    - S3_PORT=443
+    - S3_REGION=us-west-1
+    - S3_BUCKET=set_to_your_s3_bucket
     - S3_ACCESSKEY=set_to_your_access_key
     - S3_SECRETKEY=set_to_your_secret_key
-    - S3_USESSL=true
+    #- S3_FOLDER=set_to_folder_in_bucket_if_any
 
   # includes both the Express api and Vue app
   webapp:

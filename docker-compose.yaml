@@ -12,13 +12,14 @@ services:
     - 8080:8080
     volumes:
     - singlestore-data:/var/lib/memsql
-    - .:/data-load
     - ./init.sql:/init.sql
     environment:
     # use the LICENSE_KEY environment variable set in the terminal:
     - LICENSE_KEY=${LICENSE_KEY}
     - START_AFTER_INIT=Y
     - ROOT_PASSWORD=password_here
+    depends_on:
+    - minio
 
   minio:
     image: minio/minio
@@ -37,6 +38,7 @@ services:
       context: data-load
     image: singlestore-planes-data-load
     environment:
+    - S3_BUCKET=flights
     - S3_ENDPOINT=minio
     - S3_PORT=9000
     - S3_ACCESSKEY=singlestore

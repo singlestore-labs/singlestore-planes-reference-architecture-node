@@ -40,6 +40,14 @@ Choose an installation mechanism from the sections below to install:
 
 3. Open `init.sql` and adjust the S3 credentials to match your S3 bucket in both queries.
 
+   Remove `, "endpoint_url":"http://minio:9000/"`.  "endpoint_url" is only needed if you're using an S3-compatible blob store.
+
+   Set `aws_access_key_id` and `aws_secret_access_key` to match your AWS bucket.
+
+   Set `region` to your AWS region.
+
+   If you named your buckets differently or you have a folder inside your bucket, you may need to change the bucket name to the bucket name and folder name.  E.g. if I had a bucket named 'plane-app' and a folder inside named 'countries', I'd change the bucket from `countries` to `S3_BUCKET=plane-app/countries`
+
 4. Spin up a SingleStore [Managed Service trial](https://msql.co/3iQ0SE8) cluster.
 
 5. Copy `init.sql` into the query editor and run all queries to create the two tables and start the two data ingest pipelines.
@@ -48,13 +56,19 @@ Choose an installation mechanism from the sections below to install:
 
 7. Adjust connection details in `docker-compose-managed-service.yaml` to point to your managed service cluster and S3 bucket.
 
-8. Run `docker-compose build -f docker-compose-managed-service.yaml` to build all the containers.
+   Set `S3_REGION`, `S3_BUCKET`, `S3_ACCESSKEY`, and `S3_SECRETKEY` to match your AWS S3 details for the flights bucket.
 
-9. Run `docker-compose up -f docker-compose-managed-service.yaml` to start the apps.
+   If you have a folder inside your bucket, set `S3_FOLDER`.  E.g. if I have a bucket named `planes-app` and a folder inside named `flights`, then `S3_BUCKET=planes-app` and `S3_FOLDER=flights`.  Unfortunately we can't use the shorthand ~~'planes-app/flights'~~ used by piplines.
+
+   Set `SINGLESTORE_HOST`, `SINGLESTORE_USER`, and `SINGLESTORE_PASSWORD` to the SingleStore cluster details.
+
+8. Run `docker-compose -f docker-compose-managed-service.yaml build` to build all the containers.
+
+9. Run `docker-compose -f docker-compose-managed-service.yaml up` to start the apps.
 
 10. Browse to http://localhost:8000/ and watch the planes move.  Click on a plane to see the details, and choose a load date to see historical data.
 
-11. When you're done, hit cntrl-c and run `docker-compose down -f docker-compose-managed-service.yaml` to stop all the containers.
+11. When you're done, hit cntrl-c and run `docker-compose -f docker-compose-managed-service.yaml down` to stop all the containers.
 
 
 ## Install on self-managed cluster with Containers
